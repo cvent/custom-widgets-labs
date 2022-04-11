@@ -88,7 +88,7 @@ const getSessionNames = async () => {
     const sessions = getSessionDetails();
     await sessions;
     const names = Object.values(sessions).map((sessionDetail) => {
-        sessionDetail.name;
+        return sessionDetail.name;
     });
 
     return names;   

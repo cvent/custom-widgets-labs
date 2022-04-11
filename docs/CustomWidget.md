@@ -63,24 +63,71 @@ Since the CE constructor cannot await asynchronous function calls, you'll probab
 
 You may want to use multiple custom elements to better organize your code for reuse. You can import other CE classes into the file where your entrypoint CE is defined. Be sure to include the `.js` file extension in the import path.
 
-Accessory CEs must be defined in the document's custom element registry using a valid name that does not conflict with the name of a custom element for _any_ custom widget. Always check whether the accessory CE has already been defined by another instance of the widget element, attempting to define an element twice will result in an error.
+Before they can be used, accessory CEs must be defined on the page's custom element registry using a valid name that does not conflict with the name of a custom element for _any_ custom element used elsewhere on the page. This includes all widget elements, editor elements and accessory elements used in the implementation of a widget or editor element.  Always check whether the accessory CE has already been defined by another instance of the widget element, as attempting to define an element twice will result in an error.
 
-## Using Shadow DOM
+## Shadow DOM
 
 The Web Components standard includes the shadow dom feature which can be used to encapsulate the scripting and styling of the custom element to prevent interference with other aspects fo the registration site.
 
+## Example
+
+This example demonstrates the use of the constructor parameters, the custom widgets SDK and the Web Components shadow dom feature to create widget element that displays some featured sessions selected by the planner.
+
 ```Javascript
+// import an accessory custom element class
+// this element creates an site-themed information card for a session
+import { FeaturedSession } from "./FeaturedSession.js";
+
 export default class FeaturedSessionWidget extends HTMLElement {
-    constructor({ configuration, theme }) {
-        super();
-        // Create a shadow root
-        this.attachShadow({ mode: "open" });
+  constructor({ configuration, theme }) {
+    super();
+    // store the planner-selected session ids from the widget configuration for later use
+    this.featuredSessionIds = configuration.featuredSessionIds ?? [];
 
-        const hello = document.createElement('h1');
-        hello.textContent = "Hello World"
+    // store the theme for later use
+    this.theme = theme;
 
-        // append an element to the shadow root
-        this.shadowRoot.appendChild(hello);
+    // Create a shadow root
+    this.attachShadow({ mode: "open" });
+
+    const header = document.createElement("h1");
+    header.textContent = "Featured Sessions:";
+    // style the header using the site-wide theme
+    header.style.fontFamily = theme.fontPalette.primary;
+    header.style.color = theme.palette.textAccent;
+
+    // append our element to the shadow root
+    this.shadowRoot.appendChild(header);
+
+    // check first that this element name has not yet been defined
+    if (!customElements.get("featured-session")) {
+      // define a custom element that we will use to display each featured session
+      customElements.define("featured-session", FeaturedSession, {
+        extends: "div",
+      });
     }
+  }
+
+  async connectedCallback() {
+    // fetch information about all sessions
+    const sessionDetails = await this.getSessionDetails();
+
+    // create a container to hold our featured session cards
+    const featuredSessionContainer = document.createElement("div");
+
+    // for each featured session id from the widget configuration...
+    this.featuredSessionIds.forEach((sessionId) => {
+      // get the session detail object
+      const session = sessionDetails[sessionId];
+      // create a FeaturedSession CE using the session detail object and the event theme
+      featuredSessionContainer.appendChild(
+        new FeaturedSession(session, this.theme) // implementation left to your imagination...
+      );
+    });
+
+    // add our container to the document
+    this.shadowRoot.appendChild(featuredSessionContainer);
+  }
 }
+
 ```
