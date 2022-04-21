@@ -11,39 +11,28 @@ Custom widgets are published via a POST call to the custom widgets service.
 
 The url is (TODO production) https://event-custom-widgets-service.us-east-1.cvent-event-dev.cvent.cloud/sg50/event-custom-widgets/v1/
 
-For authentication, we need a bearer token. A bearer token can be retrieved by logging into planner side and copying the value of the `cvent-auth` cookie. This will be moved more in line with the Cvent Rest API before release.
+For authentication, we need a bearer token. A bearer token can be retrieved by logging into planner side and copying the value of the `cvent-auth` cookie. This will be moved more in line with the Cvent Rest API before release. This needs to be added to the Authorization header with the value "BEARER {token}"
 
 The endpoint takes a list of widgets. The fields are the metadata described [here](./CustomWidgetMetadata.md).
 
-(TODO - I want to use the github example urls here so that the call will actually add our sample widget)
 The body of the post is an array of widgets, such as:
 ```
 [
     {
-        "widgetId": "48f22f1d-cb7c-4002-99e5-58f6dc577ef1",
-        "type": "Wadget",
-        "name": "Will's Custom Widget",
+        "widgetId": "48f22f1d-cb7c-4002-99e5-58f6dc52def1",
+        "type": "FeaturedSession",
+        "name": "Feature Session",
         "minCellSize": 1,
-        "customElementName": "will-widget",
-        "widgetModuleUrl": "https://d3auq6qtr2422x.cloudfront.net/will-example-widget/src/index.js",
-        "editorModuleUrl": "https://d3auq6qtr2422x.cloudfront.net/will-example-widget/configuration/index.js"
-    },
-    {
-        "widgetId": "c12a942b-55ed-4aca-9d8e-f6823c982b4a",
-        "type": "Wadget-2",
-        "name": "Bill's Custom Widget",
-        "minCellSize": 1,
-        "customElementName": "will-widget-two",
-        "widgetModuleUrl": "http://localhost:6270/will-example-widget/widget",
-        "editorModuleUrl": "http://localhost:6270/will-example-widget/editor"
+        "customElementName": "featured-session",
+        "widgetModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/build/src/index.js",
+        "editorModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/build/configuration/index.js"
     }
 ]
 ```
 
-This example curl will publish Cvent's sample widget to your account:
-```
-TODO
-```
+The above example curl will publish Cvent's sample widget to your account.
+
+[TODO] - the widget doesn't work until we update it to reflect the changes to the session sdk
 
 Widgets in the post body are matched to existing widget by widgetId, widgets that do not match are added. We currently use the provided id in those cases, but in the future we will likely generate a new id on create for security.
 
