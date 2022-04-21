@@ -32,8 +32,6 @@ The body of the post is an array of widgets, such as:
 
 The above example curl will publish Cvent's sample widget to your account.
 
-[TODO] - the widget doesn't work until we update it to reflect the changes to the session sdk
-
 Widgets in the post body are matched to existing widget by widgetId, widgets that do not match are added. We currently use the provided id in those cases, but in the future we will likely generate a new id on create for security.
 
 Upon publishing, your widget should be available in the site designer immediately (page refresh required if you're already logged in).
