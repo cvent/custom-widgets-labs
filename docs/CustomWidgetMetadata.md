@@ -30,3 +30,6 @@ This URL specifies the location from which the module containing the custom elem
 ## `editorModuleUrl`
 
 The editor element version of the `widgetModuleURL`. The default export from this module is the entry point class for your editor element. This class may implement editor element callbacks, will receive the editor constructor arguments and have access to the Custom Widgets SDK as described [here](./CustomWidgetEditor.md).
+
+## `widgetId: string`
+A UUID representing the ID of the widget. On post, we will use the ID for matching to existing widgets (update vs. create).
