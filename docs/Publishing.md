@@ -25,7 +25,8 @@ The body of the post is an array of widgets, such as:
         "minCellSize": 1,
         "customElementName": "featured-session",
         "widgetModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/build/src/index.js",
-        "editorModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/build/configuration/index.js"
+        "widgetModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/src/index.js",
+        "editorModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/configuration/index.js"
     }
 ]
 ```
