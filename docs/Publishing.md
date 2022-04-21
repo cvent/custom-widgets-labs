@@ -9,7 +9,7 @@ Create a widget as described [here](./CustomWidget.md) and an editor as describe
 
 Custom widgets are published via a POST call to the custom widgets service.
 
-The url is (TODO production) https://event-custom-widgets-service.us-east-1.cvent-event-dev.cvent.cloud/sg50/event-custom-widgets/v1/
+The url is https://event-custom-widgets-service.us-east-1.cvent-event-prod.cvent.cloud/pr50/event-custom-widgets/v1/
 
 For authentication, we need a bearer token. A bearer token can be retrieved by logging into planner side and copying the value of the `cvent-auth` cookie. This will be moved more in line with the Cvent Rest API before release. This needs to be added to the Authorization header with the value "BEARER {token}"
 
@@ -24,7 +24,6 @@ The body of the post is an array of widgets, such as:
         "name": "Feature Session",
         "minCellSize": 1,
         "customElementName": "featured-session",
-        "widgetModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/build/src/index.js",
         "widgetModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/src/index.js",
         "editorModuleUrl": "https://cvent.github.io/custom-widgets-labs/examples/FeaturedSessionWidget/configuration/index.js"
     }
