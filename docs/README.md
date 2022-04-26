@@ -8,6 +8,8 @@ The primary part of a custom widget is the widget element. The widget element is
 
 Each custom widget will also have its own editor element. The purpose of this element is to provide the event planner with a way to edit the custom configuration fields that are passed to the widget element. This element only appears in the Site Designer when editing a custom widget. More information about the editor element can be found [here](./CustomWidgetEditor.md).
 
+A custom widget [metadata object](./CustomWidgetMetadata.md) contains several fields that define information about a widget (e.g. where the editor and widget element code is hosted). This metadata object must be published before a custom widget can be used in your account. More information on publishing a custom widget can be found [here](./Publishing.md).
+
 Both widget elements and editor elements are able to access to the custom widgets SDK. This SDK allows these elements to retrieve information about the event. More information about the custom widgets SDK can be found [here](./CustomWidgetsSDK.md).
 
 You can find an example widget [here](../examples/FeaturedSessionWidget)
