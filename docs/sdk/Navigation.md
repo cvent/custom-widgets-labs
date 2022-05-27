@@ -88,12 +88,12 @@ class MyCustomWidget extends HTMLElement {
     this.cleanup = null;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     if (!this.isConnected) {
       // do not register callback if the node has been disconnected
       return;
     }
-    const navigation = this.cventSdk.navigation;
+    const navigation = await this.cventSdk.getNavigator();
     const validate = async onSubmit => {
       const response = await callSomeService(this.config.exampleField);
 
