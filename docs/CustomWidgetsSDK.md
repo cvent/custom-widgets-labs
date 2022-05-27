@@ -1,6 +1,6 @@
 # Custom Widget SDK Overview
 
-The custom widget SDK exposes functionality from the Cvent platform to the widget and editor elements. These functions are defined on the CE class for each element.
+The custom widget SDK exposes functionality from the Cvent platform to the widget and editor elements. These functions are defined on the cventSdk field added to the Custom Element class for each element.
 
 # Methods
 
@@ -22,7 +22,7 @@ Retrieves the title of the event
 ### Example Usage
 
 ```javascript
-const title = await getEventTitle()
+const title = await this.cventSdk.getEventTitle()
 ```
 
 ---------------------------------------------------------
@@ -58,7 +58,7 @@ To trigger a single paginated query for session data, call the `next` method on 
 
 ```javascript
 // create a generator, omitting parameters to use the defaults
-const sessionGenerator = await this.getSessionGenerator();
+const sessionGenerator = await this.cventSdk.getSessionGenerator();
 
 const page0 =  await sessionGenerator.next(); // returns 10 sessions
 // {value:{sessions:[...], totalSessions:17, error: false}, done: false}
@@ -141,3 +141,6 @@ type Speaker = {
 ```
 
 ---------------------------------------------------------
+
+## `getNavigation()`
+Returns an object with methods for controlling navigation. See [Navigation](./sdk/Navigation.md)
