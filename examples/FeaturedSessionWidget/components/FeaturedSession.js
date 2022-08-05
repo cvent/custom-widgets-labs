@@ -6,13 +6,7 @@ export class FeaturedSession extends HTMLDivElement {
       return;
     }
 
-    const {
-      name,
-      description,
-      location: { name: locationName },
-      startDateTime,
-      endDateTime,
-    } = session;
+    const { name, description, location, startDateTime, endDateTime } = session;
 
     this.style.width = "32%";
     this.style.margin = "0px 8px 0px 8px";
@@ -43,14 +37,14 @@ export class FeaturedSession extends HTMLDivElement {
     title.style.fontSize = "1.5rem";
 
     // session location
-    const location = document.createElement("h2");
-    location.textContent = locationName;
-    location.style.fontFamily = theme.fontPalette.secondary;
-    location.style.color =
+    const locationEle = document.createElement("h2");
+    locationEle.textContent = location?.name ?? "";
+    locationEle.style.fontFamily = theme.fontPalette.secondary;
+    locationEle.style.color =
       config.customColors?.textSecondary ?? theme.palette.text;
-    location.style.margin = "0";
-    location.style.padding = "0px 10px 10px 10px";
-    location.style.fontSize = ".75rem";
+    locationEle.style.margin = "0";
+    locationEle.style.padding = "0px 10px 10px 10px";
+    locationEle.style.fontSize = ".75rem";
 
     // description text
     const sessionDescription = document.createElement("p");
@@ -85,7 +79,7 @@ export class FeaturedSession extends HTMLDivElement {
       image,
       timeRange,
       title,
-      location,
+      locationEle,
       sessionDescription
     );
 

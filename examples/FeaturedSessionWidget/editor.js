@@ -1,13 +1,4 @@
 class ExampleCustomEditor extends HTMLElement {
-  _config = null;
-
-  /**
-   * Arguments that allow for displaying and updating the configuration for a custom widget.
-   * Any value set as the configuration by this editor CE will be passed directly to the constructor for
-   * the widget CE as the value of `configuration`
-   * @param setConfiguration function that sets a value as the widget configuration in the site designer
-   * @param initialConfiguration the initial configuration value for the widget
-   */
   constructor({ setConfiguration, initialConfiguration }) {
     super();
     this.setConfiguration = setConfiguration;
@@ -24,12 +15,14 @@ class ExampleCustomEditor extends HTMLElement {
     header.textContent = "Select which sessions you'd like to feature: ";
     header.style.margin = "0";
     header.style.fontFamily = "Rubik";
+
     // sub header
     const subHeader = document.createElement("p");
     subHeader.textContent = "(limit 3)";
     subHeader.style.margin = "0";
     subHeader.style.fontFamily = "Rubik";
 
+    // create some sections to contain the various configuration options that will be created later
     this.themeOverrideContainer = document.createElement("div");
     this.sessionSelectorContainer = document.createElement("div");
 
@@ -44,6 +37,15 @@ class ExampleCustomEditor extends HTMLElement {
     );
   }
 
+  onConfigurationUpdate(newConfig) {
+    // keep track of the configuration in our class variable
+    this._config = newConfig;
+    // refresh the UI after a configuration change
+    this.createSessionSelectors();
+    this.createThemeOverrides();
+  }
+
+  // button that selects/deselects a session
   onClickSession = (sessionId) => {
     let featuredSessionIds = this._config.featuredSessionIds
       ? [...this._config.featuredSessionIds]
@@ -64,17 +66,17 @@ class ExampleCustomEditor extends HTMLElement {
       featuredSessionIds.splice(sessionIdIndex, 1);
     }
 
-    this.setConfiguration({ featuredSessionIds });
+    // keep all of our other config fields, overwrite `featuredSessionIds`
+    this.setConfiguration({ ...this._config, featuredSessionIds });
   };
 
-  // create a set of radio buttons for selecting a session and append them to the container
+  // create/refresh the session selection override ui
   createSessionSelectors = () => {
-    const allSessions = Object.values(this.sessionDetails ?? {});
-
+    const allSessions = this.sessionDetails ?? [];
     const featuredSessionIds = this._config.featuredSessionIds ?? [];
 
+    //create a button for every session
     const newSessionButtons = allSessions.map((session) => {
-      //create a button for this session
       const button = document.createElement("button");
       button.textContent = session.name;
       button.onclick = () => {
@@ -87,11 +89,9 @@ class ExampleCustomEditor extends HTMLElement {
       button.style.fontFamily = "Rubik";
 
       if (featuredSessionIds.includes(session.id)) {
-        //style as selected
+        // style the button as already selected
         button.style.border = "2px solid #016AE1";
         button.style.borderRadius = "8px";
-      } else {
-        // style as unselected
       }
       return button;
     });
@@ -99,13 +99,8 @@ class ExampleCustomEditor extends HTMLElement {
     this.sessionSelectorContainer.replaceChildren(...newSessionButtons);
   };
 
-  // When this callback method is defined, it will be called by the site designer application every time the widget configuration changes
-  onConfigurationUpdate(newConfig) {
-    this._config = newConfig;
-    this.createSessionSelectors();
-    this.createThemeOverrides();
-  }
-
+  // creates an element that edits the configuration to add a custom color
+  // can also remove a custom color from the configuration if the event theme should be used
   createColorPicker(title, colorCode, initialValue) {
     const container = document.createElement("div");
     container.style.display = "flex";
@@ -133,7 +128,7 @@ class ExampleCustomEditor extends HTMLElement {
       this.setConfiguration(newConfig);
     };
 
-    // Clear the config setting for this color code if we should use the event theme.
+    // clear the config setting for this color code if we should use the event theme.
     const button = document.createElement("button");
     button.textContent = "Use Event Theme";
     button.onclick = () => {
@@ -160,6 +155,7 @@ class ExampleCustomEditor extends HTMLElement {
     return container;
   }
 
+  // create/refresh the theme override ui
   createThemeOverrides() {
     const themeHeader = document.createElement("h2");
     themeHeader.textContent = "Event Theme Overrides: ";
@@ -186,10 +182,18 @@ class ExampleCustomEditor extends HTMLElement {
   }
 
   async connectedCallback() {
-    this.sessionDetails = await this.getSessionDetails();
+    // get information about every session
+    const sessionGenerator = await this.getSessionGenerator("nameAsc", 20);
+    const sessions = [];
+    for await (const page of sessionGenerator) {
+      sessions.push(...page.sessions);
+    }
 
+    // store this in a class variable so that `createSessionSelectors` can use it
+    this.sessionDetails = sessions;
+
+    // create the editor UI
     this.createSessionSelectors();
-
     this.createThemeOverrides();
   }
 }

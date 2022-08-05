@@ -1,8 +1,5 @@
-// import another custom element that handles a portion of the UI
-// Note: this import must include the file extension
-import { FeaturedSession } from "./FeaturedSession.js";
+import { FeaturedSession } from "./components/FeaturedSession.js";
 
-// the custom element entry point for the widget element
 export default class extends HTMLElement {
   images = [
     "https://d3auq6qtr2422x.cloudfront.net/images/bill-hamway-2pW3U_0rT1U-unsplash.jpeg",
@@ -15,6 +12,8 @@ export default class extends HTMLElement {
     // store theme and configuration for later use
     this.configuration = configuration;
     this.theme = theme;
+
+    console.dir({ configuration, theme });
 
     // Create a shadow root
     this.attachShadow({ mode: "open" });
@@ -45,7 +44,7 @@ export default class extends HTMLElement {
     const featuredSessionIds = this.configuration.featuredSessionIds ?? [];
 
     // create our session generator
-    const sessionGenerator = await this.getSessionGenerator("dateTimeDsc", 20);
+    const sessionGenerator = await this.getSessionGenerator("dateTimeDesc", 20);
     const sessions = [];
 
     // iterate over the generator to get all of our sessions
