@@ -1,3 +1,5 @@
+// import another custom element that handles a portion of the UI
+// Note: this import must include the file extension
 import { FeaturedSession } from "./components/FeaturedSession.js";
 
 export default class extends HTMLElement {
@@ -12,8 +14,6 @@ export default class extends HTMLElement {
     // store theme and configuration for later use
     this.configuration = configuration;
     this.theme = theme;
-
-    console.dir({ configuration, theme });
 
     // Create a shadow root
     this.attachShadow({ mode: "open" });

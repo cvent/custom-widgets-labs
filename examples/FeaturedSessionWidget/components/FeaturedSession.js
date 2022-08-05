@@ -14,6 +14,7 @@ export class FeaturedSession extends HTMLDivElement {
     this.style.overflow = "hidden";
 
     const sessionInfoBlock = document.createElement("div");
+    // if a theme override is defined in the configuration, use that instead of the event theme
     sessionInfoBlock.style.backgroundColor =
       config.customColors?.background ?? theme.palette.secondary;
     sessionInfoBlock.style.height = "100%";
@@ -74,7 +75,7 @@ export class FeaturedSession extends HTMLDivElement {
     timeRange.style.padding = "10px 10px 0px 10px";
     timeRange.style.fontSize = ".75rem";
 
-    // append all children element to the div
+    // append all children to the div
     sessionInfoBlock.append(
       image,
       timeRange,

@@ -21,7 +21,6 @@ export default class extends HTMLElement {
     const saveConfigButton = document.createElement("button");
     saveConfigButton.textContent = "Save";
     saveConfigButton.onclick = () => {
-      console.log("saving: " + textInput.value);
       setConfiguration({ subheading: textInput.value });
     };
 
