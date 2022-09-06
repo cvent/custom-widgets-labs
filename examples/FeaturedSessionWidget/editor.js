@@ -183,6 +183,7 @@ class ExampleCustomEditor extends HTMLElement {
 
   async connectedCallback() {
     // get information about every session
+    // NOTE: this method supports pagination, using it will improve the performance of your site when dealing with a large number of sessions
     const sessionGenerator = await this.getSessionGenerator("nameAsc", 20);
     const sessions = [];
     for await (const page of sessionGenerator) {

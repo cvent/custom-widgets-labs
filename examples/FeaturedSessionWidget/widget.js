@@ -1,5 +1,5 @@
 // import another custom element that handles a portion of the UI
-// Note: this import must include the file extension
+// NOTE: this import must include the file extension
 import { FeaturedSession } from "./components/FeaturedSession.js";
 
 export default class extends HTMLElement {
@@ -18,11 +18,11 @@ export default class extends HTMLElement {
     // Create a shadow root
     this.attachShadow({ mode: "open" });
 
-    // attempting to define this custom element a second time (e.g. having two copies of this widget)
-    // will cause an error
-    if (!customElements.get("featured-session")) {
+    // a naming collision with any other custom element on the page
+    // (e.g. from having two copies of this widget) would cause an error
+    if (!customElements.get("namespace-featured-session")) {
       // define a custom element that we will use to display each featured session
-      customElements.define("featured-session", FeaturedSession, {
+      customElements.define("namespace-featured-session", FeaturedSession, {
         extends: "div",
       });
     }
