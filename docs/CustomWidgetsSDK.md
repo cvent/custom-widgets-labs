@@ -172,4 +172,4 @@ Returns an object with methods for controlling navigation. See [Navigation](./sd
 
 ## `registration`
 
-For more information on methods defined under the `registration` field of cventSdk, See [Registration](./sdk/Registration.md).
+For more information on methods defined under the `registration` field of cventSdk, see [Registration](./sdk/Registration.md).

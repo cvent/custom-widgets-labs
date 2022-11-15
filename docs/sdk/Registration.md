@@ -1,6 +1,6 @@
 # Registration
 
-The custom widget SDK provides methods that allow for custom widgets to commit registration actions.
+The custom widget SDK provides methods that allow for custom widgets to commit registration actions. These methods are defined on the `registration` property of `cventSdk` which is defined on the custom element class of every widget.
 
 ---------------------------------------------------------
 
@@ -23,7 +23,7 @@ This method does not apply to sessions in a session group.
 
 #### Notes
 - The 'current' registrant is the registrant that started the registration process or the primary registrant of a group. It is never a guest registrant.
-- As of the first release of the registration portion of the SDK, there is no supported way to retrieve the registrationId of any registrant. As a result, this method is currently limited to use only on the current registrant.
+- As of the first release of the registration portion of the SDK, there is no supported way to retrieve the registrationId of any registrant. As a result, this method is effectively limited to use only with the current registrant.
 
 ### Returns
 This method returns an object with the following properties:
@@ -48,7 +48,7 @@ Possible return values are limited to the following:
 |  `{status: "WAITLIST_UNAVAILABLE", subStatus: "NO_WAITLIST"}` | the session is at capacity and does not have a waitlist| 
 |  `{status: "WAITLIST_UNAVAILABLE", subStatus: "WAITLIST_FULL"}` | the session and the waitlist for the session are at capacity| 
 |  `{status: "SESSION_DNE"}` | no session exists with the id provided to the `sessionId` parameter.| 
-|  `{status: "REGISTRATION_DNE"}` | no registration exists with the id provided to the `registrationId` parameter. This can occur if this method is called before a registration ahs been started.| 
+|  `{status: "REGISTRATION_DNE"}` | no registration exists with the id provided to the `registrationId` parameter. This can occur if this method is called before a registration has been started.| 
 
 ### Using `getSessionStatus`
 
@@ -58,7 +58,7 @@ const sessionGenerator = await this.cventSdk.getSessionGenerator('dateTimeDesc',
 // retrieve the first page of sessions
 const { sessions } = await sessionGenerator.next();
 
-// get the session status of the first session
+// get the status of the first session
 const { status, subStatus } = await this.cventSdk.registration.getSessionStatus(sessions[0].id);
 ```
 note: a more robust example is available [here](../../examples/RegistrationWidget/README.md)
@@ -85,7 +85,7 @@ Which registration is taken depends on the status of the session, which is deter
 
 #### Notes
 - The 'current' registrant is the registrant that started the registration process or the primary registrant of a group. It is never a guest registrant.
-- As of the first release of the registration portion of the SDK, there is no supported way to retrieve the registrationId of any registrant. As a result, this method is currently limited to use only on the current registrant.
+- As of the first release of the registration portion of the SDK, there is no supported way to retrieve the registrationId of any registrant. As a result, this method is effectively limited to use only with the current registrant.
 
 
 ### Returns
@@ -102,7 +102,7 @@ The value of these properties depends on the status of the session at the time t
 
 
 ### Actionable Session Statuses
-`pickSession` will only attempt a to commit a registration action for sessions that have an "actionable" status. The actionable statuses are limited to the ones listed below in the `initialStatus` column. This table also shows the corresponding `action` that will be attempted for each actionable session status.
+`pickSession` will only attempt to commit a registration action for sessions that have an "actionable" status. The actionable statuses are limited to the ones listed below in the `initialStatus` column. This table also shows the corresponding `action` that will be attempted for each actionable session status.
 
 |`initialStatus`|`action`|Status after a successful action
 |-------------|----------|-|
@@ -133,22 +133,22 @@ When a call to `pickSession` fails, in addition to returning a `success` value o
 |`'AVAILABILITY_ERROR'`|The session is no longer available. This can occur if the session is cancelled or closed after the registrant begins their registration.|
 |`'UNKNOWN_ERROR'`| The cause of the failure could not be determined. If this error, persists, reach out to Cvent support.|
 |`'NOT_ACTIONABLE'`| The session was in a non-actionable status when the method was called|
-|`'REG_ACTION_IN_PROGRESS'`| A registration action originating from outside of the custom widgetSDK was processing when `pickSession` was called.|
+|`'REG_ACTION_IN_PROGRESS'`| A registration action originating from outside of the custom widget SDK was processing when `pickSession` was called.|
 
 
 ### Using `pickSession`
 
 ```javascript
-const sessionGenerator = await this.getSessionGenerator('dateTimeDesc', 20);
+const sessionGenerator = await this.cventSdk.getSessionGenerator('dateTimeDesc', 20);
 
 // retrieve the first page of sessions
-const {sessions} = sessionGenerator.next();
+const {sessions} = await sessionGenerator.next();
 
-// get the session status of the first session
+// get the status of the first session
 const { status, subStatus } = await this.cventSdk.registration.getSessionStatus(sessions[0].id);
 
 switch (status) {
-    // attempt a registration action only if the session is in a non actionable status
+    // attempt a registration action only if the session is in an actionable status
     case "OPEN":
     case "WAITLISTED":
     case "SELECTED":
@@ -158,7 +158,7 @@ switch (status) {
         console.log(`a ${action} action was attempted for the session with id ${sessionId}`);
         
         if (!success) {
-            console.log(`the ${action} action attempted for the session with id: ${sessionId} failed with error code: ${failureReason}. The session remains in the status: ${initialStatus}`);
+            console.log(`the ${action} action attempted for the session with id: ${sessionId} failed with error code: ${failureReason}. The session remains in the status: ${initialStatus.status}`);
         }
         break;
     }
