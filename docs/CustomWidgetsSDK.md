@@ -169,3 +169,7 @@ When filtering by a restrictive set of filtering criteria, using a sufficiently 
 ## `getNavigation()`
 
 Returns an object with methods for controlling navigation. See [Navigation](./sdk/Navigation.md)
+
+## `registration`
+
+For more information on methods defined under the `registration` field of cventSdk, See [Registration](./sdk/Registration.md).
