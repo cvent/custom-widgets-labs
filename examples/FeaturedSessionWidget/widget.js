@@ -12,7 +12,7 @@ export default class extends HTMLElement {
   constructor({ configuration, theme }) {
     super();
     // store theme and configuration for later use
-    this.configuration = configuration;
+    this.configuration = configuration || {};
     this.theme = theme;
 
     // Create a shadow root
