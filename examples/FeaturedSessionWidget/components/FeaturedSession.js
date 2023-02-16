@@ -6,7 +6,7 @@ export class FeaturedSession extends HTMLDivElement {
       return;
     }
 
-    const { name, description, location, startDateTime, endDateTime } = session;
+    const { name, description, location, startDateTime, endDateTime , category} = session;
 
     this.style.width = "32%";
     this.style.margin = "0px 8px 0px 8px";
@@ -46,16 +46,56 @@ export class FeaturedSession extends HTMLDivElement {
     locationEle.style.margin = "0";
     locationEle.style.padding = "0px 10px 10px 10px";
     locationEle.style.fontSize = ".75rem";
+    locationEle.style.display = 'inline'
 
     // description text
     const sessionDescription = document.createElement("p");
-    sessionDescription.textContent = description;
+    sessionDescription.innerHTML = description;
     sessionDescription.style.fontFamily = theme.fontPalette.primary;
     sessionDescription.style.color =
       config.customColors?.textPrimary ?? theme.palette.textAccent;
     sessionDescription.style.margin = "0";
     sessionDescription.style.padding = "0px 10px 10px 10px";
     sessionDescription.style.fontSize = ".75rem";
+
+
+    //Session Category
+    const sessionCategory = document.createElement("div");
+    sessionCategory.style.backgroundColor= `lightgray`;
+    sessionCategory.style.fontFamily = theme.fontPalette.secondary;
+    sessionCategory.style.color =
+      config.customColors?.textSecondary ?? theme.palette.text;
+    sessionCategory.style.padding = "2px 4px 2px 4px";
+    sessionCategory.style.fontSize = ".75rem";
+    sessionCategory.style.display = 'block'
+
+    const sessionCategoryName = document.createElement("p");
+    sessionCategoryName.textContent = category.name;
+    sessionCategoryName.style.margin = '0px'
+    sessionCategoryName.style.display = 'inline'
+
+    const sessionCategoryDescription = document.createElement("div");
+    sessionCategoryDescription.innerHTML = category.description;
+    sessionCategoryDescription.style.display = 'none'
+    sessionCategoryDescription.style.margin = "0px";
+    sessionCategoryDescription.style.fontFamily = theme.fontPalette.primary;
+    sessionCategoryDescription.style.color =
+      config.customColors?.textPrimary ?? theme.palette.textAccent;
+    sessionCategoryDescription.style.fontSize = ".75rem";
+    
+
+    sessionCategory.onmouseenter = () => {
+      sessionCategoryDescription.style.display = "block"
+      sessionCategoryDescription.style.margin = "5px";
+    }
+
+    sessionCategory.onmouseleave = () => {
+      sessionCategoryDescription.style.display = "none"
+      sessionCategoryDescription.style.margin = "0px";
+    }
+
+    sessionCategory.append(sessionCategoryName, sessionCategoryDescription)
+
 
     // date range text
     const timeRange = document.createElement("h2");
@@ -81,8 +121,9 @@ export class FeaturedSession extends HTMLDivElement {
       timeRange,
       title,
       locationEle,
-      sessionDescription
-    );
+      sessionDescription,
+      sessionCategory
+          );
 
     this.appendChild(sessionInfoBlock);
   }
